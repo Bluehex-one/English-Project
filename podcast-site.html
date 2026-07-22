@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Podcast Name] — A podcast about In My Blood It Runs</title>
+<style>
+  :root {
+    --paper: #F7F3EC;
+    --paper-dim: #EFE8D9;
+    --ink: #2B2620;
+    --ink-soft: #5A5347;
+    --rust: #B5551F;
+    --sage: #5C6B57;
+    --line: #D8CFC0;
+  }
+
+  * { box-sizing: border-box; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    letter-spacing: 0.02em;
+  }
+
+  a { color: inherit; }
+
+  /* horizon-line motif */
+  .horizon {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--line) 15%, var(--line) 85%, transparent);
+  }
+
+  header.site {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(247, 243, 236, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-wrap .title {
+    font-size: 1.1rem;
+  }
+
+  nav.links {
+    display: flex;
+    gap: 28px;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+
+  nav.links a {
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  nav.links a:hover, nav.links a:focus-visible { color: var(--rust); }
+
+  /* Hero */
+  .hero {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 90px 24px 70px;
+    position: relative;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.78rem;
+    color: var(--rust);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-bottom: 18px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    line-height: 1.08;
+    max-width: 14ch;
+  }
+
+  .hero .sub {
+    margin-top: 22px;
+    max-width: 55ch;
+    color: var(--ink-soft);
+    font-size: 1.08rem;
+  }
+
+  .hero-horizon {
+    margin-top: 60px;
+    position: relative;
+  }
+  .hero-horizon svg { display: block; width: 100%; height: auto; }
+
+  .hero-cta {
+    margin-top: 34px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 2px;
+    font-size: 0.92rem;
+    text-decoration: none;
+    border: 1px solid var(--ink);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn.primary {
+    background: var(--rust);
+    border-color: var(--rust);
+    color: var(--paper);
+  }
+  .btn.primary:hover, .btn.primary:focus-visible { background: #9c4718; }
+  .btn.ghost:hover, .btn.ghost:focus-visible { background: var(--ink); color: var(--paper); }
+
+  /* Sections */
+  section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 70px 24px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .section-head h2 {
+    font-size: 1.9rem;
+  }
+
+  .section-head .count {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+
+  /* Episode list */
+  .episode {
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 20px;
+    align-items: start;
+    padding: 30px 0;
+    border-top: 1px solid var(--line);
+  }
+  .episode:last-child { border-bottom: 1px solid var(--line); }
+
+  .ep-num {
+    font-size: 1.3rem;
+    color: var(--rust);
+    padding-top: 2px;
+  }
+
+  .ep-body h3 {
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+  }
+
+  .ep-meta {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .ep-meta span:not(:last-child)::after {
+    content: "·";
+    margin: 0 8px;
+    color: var(--line);
+  }
+
+  .ep-desc {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+    max-width: 60ch;
+    margin-bottom: 16px;
+  }
+
+  .player-placeholder {
+    border: 1px dashed var(--line);
+    border-radius: 3px;
+    padding: 12px 16px;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    background: var(--paper-dim);
+  }
+  .player-placeholder audio {
+    width: 100%;
+    margin-top: 8px;
+    filter: sepia(8%) saturate(70%);
+  }
+
+  .ep-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    padding-top: 4px;
+  }
+
+  .ep-actions a {
+    font-size: 0.82rem;
+    text-decoration: none;
+    color: var(--sage);
+    white-space: nowrap;
+  }
+  .ep-actions a:hover { color: var(--rust); }
+
+  /* About */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 50px;
+  }
+  .about-grid p { color: var(--ink-soft); margin: 0 0 16px; }
+
+  .about-card {
+    border: 1px solid var(--line);
+    padding: 26px;
+    border-radius: 3px;
+    background: var(--paper-dim);
+    height: fit-content;
+  }
+  .about-card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 14px;
+  }
+  .about-card .field {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    padding: 9px 0;
+    border-top: 1px solid var(--line);
+  }
+  .about-card .field:first-of-type { border-top: none; }
+  .about-card .field .k { color: var(--ink-soft); }
+
+  /* Subscribe */
+  .subscribe-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 700px) {
+    nav.links { display: none; }
+    .episode { grid-template-columns: 40px 1fr; }
+    .ep-actions { grid-column: 1 / -1; flex-direction: row; padding-top: 12px; }
+    .about-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-wrap">
+    <div class="title display">Change through Voice</div>
+    <nav class="links">
+      <a href="#episodes">Episodes</a>
+      <a href="#about">About</a>
+      <a href="#subscribe">Subscribe</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="eyebrow">A podcast about <em>In My Blood It Runs</em></span>
+  <p class="sub">This podcast is about closing the gaps that are present between Indigenous and Australians</p>
+
+  <div class="hero-cta">
+    <a href="#episodes" class="btn primary">Listen to episodes</a>
+    <a href="#about" class="btn ghost">About the podcast</a>
+  </div>
+
+  <div class="hero-horizon">
+    <svg viewBox="0 0 960 60" preserveAspectRatio="none">
+      <line x1="0" y1="30" x2="960" y2="30" stroke="#D8CFC0" stroke-width="1"/>
+    </svg>
+  </div>
+</div>
+
+<section id="episodes">
+  <div class="section-head">
+    <h2>Episodes</h2>
+    <span class="count mono">[5] episodes</span>
+  </div>
+
+  <!-- Repeat this .episode block for each new episode -->
+
+  <div class="episode">
+    <div class="ep-num mono">01</div>
+    <div class="ep-body">
+      <h3>Ep 1 Educational gaps</h3>
+      <div class="ep-meta">
+        <span>July 27, 2026</span>
+        <span>3 minutes</span>
+        <span>Max Yu</span>
+      </div>
+      <p class="ep-desc">This discusses the educational gaps between Indigenous and Australian people</p>
+      <div class="player-placeholder">
+        Audio embed placeholder — paste an &lt;iframe&gt; (Spotify/Apple/etc.) or an audio file source here.
+        <audio controls>
+          <source src="[episode-01-audio-file.mp3]" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
+  </div>
+
+  <div class="episode">
+    <div class="ep-num mono">01</div>
+    <div class="ep-body">
+      <h3>Ep 2 Negligence to Indigenous Culture</h3>
+      <div class="ep-meta">
+        <span>July 27, 2026</span>
+        <span>3 minutes</span>
+        <span>Justin Shu</span>
+      </div>
+      <p class="ep-desc">This discusses the negligence to aboriginal culture </p>
+      <div class="player-placeholder">
+        Audio embed placeholder — paste an &lt;iframe&gt; (Spotify/Apple/etc.) or an audio file source here.
+        <audio controls>
+          <source src="[episode-01-audio-file.mp3]" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
+  </div>
+
+    <div class="episode">
+    <div class="ep-num mono">01</div>
+    <div class="ep-body">
+      <h3>Ep 3 Language and attitude</h3>
+      <div class="ep-meta">
+        <span>July 27, 2026</span>
+        <span>3 minutes</span>
+        <span>Xiao Chen</span>
+      </div>
+      <p class="ep-desc">This discusses the how we can use correct langauge and attitude to indigenous people</p>
+      <div class="player-placeholder">
+        Audio embed placeholder — paste an &lt;iframe&gt; (Spotify/Apple/etc.) or an audio file source here.
+        <audio controls>
+          <source src="[episode-01-audio-file.mp3]" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add more .episode blocks as needed -->
+
+</section>
+
+<div class="horizon"></div>
+
+<section id="about">
+  <div class="section-head">
+    <h2>About</h2>
+  </div>
+  <div class="about-grid">
+    <div>
+      <p>This is a podcast series that uses In My Blood It Runs to present issues about out current society, advocate for change now!</p>
+      <p>Max, Justin, Xiao - a talented group of individuals who strive for change, and we encourage you to do so as well.</p>
+    </div>
+    <div class="about-card">
+      <h3 class="display">Details</h3>
+      <div class="field"><span class="k">Host</span><span>Justin, Max, Xiao</span></div>
+      <div class="field"><span class="k">Format</span><span>Solo</span></div>
+      <div class="field"><span class="k">Frequency</span><span>Weekly</span></div>
+      <div class="field"><span class="k">Language</span><span>English</span></div>
+      <div class="field"><span class="k">Contact</span><span>Changethroughvoice@company.com</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="horizon"></div>
+
+<section id="subscribe">
+  <div class="section-head">
+    <h2>Subscribe</h2>
+  </div>
+  <p style="color: var(--ink-soft); margin-top: -20px; margin-bottom: 28px;">[We will be up on major podcast and streaming platforms soon!]</p>
+</section>
+
+<footer>
+  <div class="horizon" style="margin-bottom: 24px;"></div>
+  © 2026 Change through Voice. Change the world, one voice at a time.
+</footer>
+
+<script>
+  // Smooth scroll for in-page nav links
+  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      var targetId = this.getAttribute('href').slice(1);
+      var target = document.getElementById(targetId);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
